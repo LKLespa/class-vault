@@ -1,23 +1,29 @@
 import { createBrowserRouter } from "react-router-dom";
-import AuthWrapper from "./pages/AuthWrapper";
+import AuthWrapper from "./components/Layout/AuthWrapper";
 import SignInForm from "./components/Auth/SignInForm";
 import SignUpForm from "./components/Auth/SignUpForm";
 import ErrorPage from "./pages/ErrorPage";
+import HomePage from "./pages/HomePage";
 
 const routeNames = {
-    home: "/",
+    home: "",
     auth: "auth",
-    signIn: "sign-in",
-    signUp: "sign-up",
+    signIn: "signin",
+    signUp: "signup",
 };
 
 const pathLinks = {
-    home: routeNames.home,
+    home: "/",
     signIn: `/${routeNames.signIn}`,
     signUp: `/${routeNames.signUp}`,
 }
 
 const routes = createBrowserRouter([
+    {
+        path: routeNames.home,
+        element: <HomePage />
+    },
+
     {
         element: <AuthWrapper />,
         children: [

@@ -1,27 +1,38 @@
-// src/theme.js
-import { createSystem, defaultConfig } from "@chakra-ui/react";
+import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react"
 
-export const system = createSystem(defaultConfig, {
+const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
         brand: {
-          50: { value: "#e9fbee" },
-          100: { value: "#c7eacb" },
-          200: { value: "#a3d9a9" },
-          300: { value: "#7fc987" },
-          400: { value: "#5cb865" },
-          500: { value: "#ff0000" },
-          600: { value: "#328239" },
-          700: { value: "#235e28" },
-          800: { value: "#133a16" },
-          900: { value: "#001700" },
+          50:  { value: "#f5f3ff" },  // Soft lavender
+          100: { value: "#ede9fe" },
+          200: { value: "#ddd6fe" },
+          300: { value: "#c4b5fd" },
+          400: { value: "#a78bfa" },  // Main accent start
+          500: { value: "#8b5cf6" },  // Primary color
+          600: { value: "#7c3aed" },
+          700: { value: "#6d28d9" },
+          800: { value: "#5b21b6" },
+          900: { value: "#4c1d95" },
+          950: { value: "#2e1065" },
+        },
+      }
+    },
+    semanticTokens: {
+      colors: {
+        brand: {
+          solid: { value: "{colors.brand.500}" },
+          contrast: { value: "{colors.brand.100}" },
+          fg: { value: "{colors.brand.700}" },
+          muted: { value: "{colors.brand.100}" },
+          subtle: { value: "{colors.brand.200}" },
+          emphasized: { value: "{colors.brand.300}" },
+          focusRing: { value: "{colors.brand.500}" },
         },
       },
-      fonts: {
-        heading: { value: `'Figtree', sans-serif` },
-        body: { value: `'Figtree', sans-serif` },
-      },
     },
-  },
-});
+  }
+})
+
+export const system = createSystem(defaultConfig, customConfig)

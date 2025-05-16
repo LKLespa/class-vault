@@ -13,9 +13,10 @@ import {
 } from "@chakra-ui/react";
 
 import * as Yup from "yup";
-import { Form, Formik, Field as FormikField } from "formik";
+import { Form, Formik, Field as FormikField, validateYupSchema } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { pathLinks } from "../../routes";
+import { useAuth } from "../../context/authContext";
 
 const SignUpSchema = Yup.object().shape({
   fullName: Yup.string().trim().required("Full Name is required"),
@@ -29,11 +30,16 @@ const SignUpSchema = Yup.object().shape({
 })
 
 const SignUpForm = () => {
-
+  const { loading, error, signUp } = useAuth()
   const navigate = useNavigate();
 
-  const handleSubmit = (values) => {
-      console.log("Form Values >", values);
+  const handleSubmit = async (values) => {
+      signUp({email: values.email,
+    password: values.password,
+    fullName: values.fullName,
+    phoneNumber: values.phone,
+    role: values.role,
+    onDone: () => navigate(pathLinks.home),})
   }
 
   return (
@@ -141,7 +147,7 @@ const SignUpForm = () => {
                   </Field.Root>
                 </Fieldset.Content>
 
-                <Button type="submit" size="lg" w="full" mt={4}>
+                <Button type="submit" size="lg" w="full" mt={4} loading={loading}>
                   Sign Up
                 </Button>
 

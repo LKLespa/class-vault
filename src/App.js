@@ -1,21 +1,27 @@
 import './App.css';
 import React from "react";
-import { ChakraProvider, Theme } from "@chakra-ui/react";
+import { Box, ChakraProvider, Theme } from "@chakra-ui/react";
 import { RouterProvider } from "react-router-dom";
 import { system } from "./theme";
 import routes from "./routes";
 import { useTheme } from './hooks/useTheme';
+import { AuthProvider } from './context/authContext';
+import { Toaster } from './components/ui/toaster';
+import { Provider } from './components/ui/provider';
 
 const App = () => {
 
   const { color, appearance } = useTheme();
 
   return (
-    <ChakraProvider value={system}>
-      <Theme colorPalette={color} appearance={appearance}>
+    <Provider>
+      <Box colorPalette='brand'>
+        <AuthProvider>
         <RouterProvider router={routes} />
-      </Theme>
-    </ChakraProvider>
+      <Toaster />
+      </AuthProvider>
+      </Box>
+    </Provider>
   );
 };
 

@@ -11,8 +11,9 @@ import {
 } from "@chakra-ui/react";
 import * as Yup from "yup";
 import { Formik, Form, Field as FormikField } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { pathLinks } from "../../routes";
+import { useAuth } from "../../context/authContext";
 
 // 🔐 Yup Validation Schema
 const SignInSchema = Yup.object().shape({
@@ -22,8 +23,15 @@ const SignInSchema = Yup.object().shape({
 
 const SignInForm = () => {
 
+  const { signIn, loading } = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = (values) => {
-    console.log("Sign In Form Values >", values);
+    signIn({
+      email: values.email,
+      password: values.password,
+      onDone: () => navigate(pathLinks.home)
+    })
   }
 
   return (
@@ -34,7 +42,7 @@ const SignInForm = () => {
       borderRadius="xl"
     >
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "mbahlesky4@gmail.com", password: "lespanio" }}
         validationSchema={SignInSchema}
         onSubmit={handleSubmit}
       >
@@ -79,7 +87,7 @@ const SignInForm = () => {
                   </Field.Root>
                 </Fieldset.Content>
 
-                <Button type="submit" size="lg" w="full" mt={4}>
+                <Button type="submit" size="lg" w="full" mt={4} loading={loading}>
                   Sign In
                 </Button>
 

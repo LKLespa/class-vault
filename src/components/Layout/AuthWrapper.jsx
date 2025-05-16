@@ -7,7 +7,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import { useTheme } from "../hooks/useTheme";
+import { useTheme } from "../../hooks/useTheme";
 
 export default function AuthWrapper() {
   const { color } = useTheme();
@@ -23,14 +23,13 @@ export default function AuthWrapper() {
         borderRadius="2xl"
         boxShadow="2xl"
         overflow="hidden"
-        bg="white"
       >
         {/* Left Section (Branding) */}
         <Box
           flex="1"
           p={{ base: 6, md: 10 }}
           textAlign="center"
-          bg={color || "blue.500"} // fallback
+          bg='brand.500' // fallback
           color="white"
           display="flex"
           flexDirection="column"
