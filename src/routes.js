@@ -4,6 +4,7 @@ import SignInForm from "./components/Auth/SignInForm";
 import SignUpForm from "./components/Auth/SignUpForm";
 import ErrorPage from "./pages/ErrorPage";
 import HomePage from "./pages/HomePage";
+import { DashboardLayout } from "./components/Layout/DashboardLayout";
 
 const routeNames = {
     home: "",
@@ -16,12 +17,18 @@ const pathLinks = {
     home: "/",
     signIn: `/${routeNames.signIn}`,
     signUp: `/${routeNames.signUp}`,
+    profile: '/profile',
 }
 
 const routes = createBrowserRouter([
     {
-        path: routeNames.home,
-        element: <HomePage />
+        element: <DashboardLayout />,
+        children: [
+            {
+                path: routeNames.home,
+                element: <HomePage />
+            }
+        ]
     },
 
     {
