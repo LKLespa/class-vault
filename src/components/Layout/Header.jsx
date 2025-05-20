@@ -16,20 +16,24 @@ import {
     VStack,
     useBreakpointValue,
 } from "@chakra-ui/react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../provider/AuthProvider";
 import { ColorModeButton } from "../ui/color-mode";
 import { LuHam, LuMenu, LuPlus, LuSearch } from "react-icons/lu";
 import { FiBell } from "react-icons/fi";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
-import CreateVaultMenu from "../Resource/CreateVaultMenu";
+import NewVaultModal from "../Vaults/NewVaultModal";
+import { pathLinks } from "../../routes";
 
 export default function Header() {
     const { userData } = useAuth();
     const [openDrawer, setOpenDrawer] = useState(false);
     const [openVaultMenu, setOpenVaultMenu] = useState(false);
+    const navigate = useNavigate();
+
+    console.log("User data", userData)
 
     return (
         <Drawer.Root open={openDrawer}>
@@ -51,18 +55,18 @@ export default function Header() {
                         <InputGroup maxWidth='300px' endElement={<IconButton variant="ghost"><LuSearch /></IconButton>}>
                             <Input placeholder="Search..." />
                         </InputGroup>
-                        <CreateVaultMenu open={openVaultMenu} setOpen={setOpenVaultMenu}>
+                        <NewVaultModal open={openVaultMenu} setOpen={setOpenVaultMenu}>
                             <Button variant='subtle'>
                             New Vault <LuPlus />
                         </Button>
-                        </CreateVaultMenu>
+                        </NewVaultModal>
                     </HStack>
 
                     <HStack spacing={3}>
                         <IconButton display={{ base: "flex", lg: "none" }} variant="ghost"><LuSearch /></IconButton>
                         <ColorModeButton />
-                        <IconButton variant="ghost"><FiBell /></IconButton>
-                        <Avatar.Root display={{ base: "none", lg: "flex" }}>
+                        <IconButton variant="ghost" onClick={() => navigate(pathLinks.notifications)}><FiBell /></IconButton>
+                        <Avatar.Root display={{ base: "none", lg: "flex" }} cursor='pointer' onClick={() => navigate(pathLinks.profile)}>
                             <Avatar.Fallback name={userData?.fullName} />
                         </Avatar.Root>
                         <IconButton display={{ base: "flex", lg: "none" }} variant="ghost" onClick={() => setOpenDrawer(true)}><LuMenu /></IconButton>

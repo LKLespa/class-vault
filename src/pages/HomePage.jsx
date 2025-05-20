@@ -14,12 +14,12 @@ import {
   Icon,
   Popover,
 } from "@chakra-ui/react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../provider/AuthProvider";
 import { useState } from "react";
 import { useColorModeValue } from "../components/ui/color-mode";
 import { LuPlus, LuBookOpen, LuCalendar } from "react-icons/lu";
 import { FiBell } from "react-icons/fi";
-import CreateVaultMenu from "../components/Resource/CreateVaultMenu";
+import NewVaultModal from "../components/Vaults/NewVaultModal";
 
 export default function HomePage() {
   const { userData } = useAuth();
@@ -66,7 +66,7 @@ export default function HomePage() {
         {/* First Row: Create Vault + Institute Info */}
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} height={{ base: '100px', lg: '250px'
         }} gap={6} w="100%">
-          <CreateVaultMenu open={openVaultMenu} setOpen={setOpenVaultMenu}>
+          <NewVaultModal open={openVaultMenu} setOpen={setOpenVaultMenu}>
             <Card.Root bg="brand.600" cursor='pointer'>
             <Card.Body display='flex' justifyContent='center' alignItems='center'>
               <Icon size='xl'>
@@ -75,7 +75,7 @@ export default function HomePage() {
               <Text textStyle='xl'>Create New Vault</Text>
             </Card.Body>
           </Card.Root>
-          </CreateVaultMenu>
+          </NewVaultModal>
 
           <Card.Root title="Your Institute(s)">
             <Card.Body>

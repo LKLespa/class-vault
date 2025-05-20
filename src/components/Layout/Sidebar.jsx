@@ -2,22 +2,22 @@
 import { VStack, HStack, Text, Box, Avatar } from "@chakra-ui/react";
 import { FiHome, FiFolder, FiUsers, FiSettings, FiLogOut, FiUser } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../provider/AuthProvider";
 import { pathLinks } from "../../routes";
-
-const navLinks = [
-  { label: "Home", icon: FiHome, path: "/" },
-  { label: "My Vaults", icon: FiUser, path: ""},
-  { label: "ClassVaults", icon: FiFolder, path: "/classvaults" },
-  { label: "CollabVaults", icon: FiUsers, path: "/collabvaults" },
-  { label: "Settings", icon: FiSettings, path: "/settings" },
-];
 
 export default function Sidebar() {
     const { userData } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { signOut } = useAuth();
+
+  const navLinks = [
+  { label: "Home", icon: FiHome, path: "/" },
+  { label: "ClassRooms", icon: FiUser, path: pathLinks.classRooms},
+  { label: "ClassVaults", icon: FiFolder, path: pathLinks.classVaults },
+  { label: "CollabVaults", icon: FiUsers, path: pathLinks.collabVaults },
+  { label: "Settings", icon: FiSettings, path: pathLinks.settings },
+];
 
   return (
     <VStack

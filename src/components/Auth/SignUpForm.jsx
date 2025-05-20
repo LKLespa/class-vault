@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { Form, Formik, Field as FormikField, validateYupSchema } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { pathLinks } from "../../routes";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../provider/AuthProvider";
 
 const SignUpSchema = Yup.object().shape({
   fullName: Yup.string().trim().required("Full Name is required"),

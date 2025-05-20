@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { Formik, Form, Field as FormikField } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { pathLinks } from "../../routes";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../provider/AuthProvider";
 
 // 🔐 Yup Validation Schema
 const SignInSchema = Yup.object().shape({
@@ -42,7 +42,7 @@ const SignInForm = () => {
       borderRadius="xl"
     >
       <Formik
-        initialValues={{ email: "mbahlesky4@gmail.com", password: "lespanio" }}
+        initialValues={{ email: "", password: "" }}
         validationSchema={SignInSchema}
         onSubmit={handleSubmit}
       >

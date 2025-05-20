@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useEffect, useRef } from "react";
 import Loader from "../Resource/Loader";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../provider/AuthProvider";
 import { toaster } from "../ui/toaster";
 import { pathLinks } from "../../routes";
 
