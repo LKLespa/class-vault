@@ -21,7 +21,7 @@ import SettingsPage from "./pages/SettingsPage";
 //     auth: "auth",
 //     signIn: "signin",
 //     signUp: "signup",
-//     collabVaults: 'collab-vaults',
+//     collabvaults: 'collab-vaults',
 // };
 
 const pathLinks = {
@@ -29,10 +29,10 @@ const pathLinks = {
     signIn: `/signin`,
     signUp: `/signup`,
     profile: '/profile',
-    institute: `/institute`,
-    collabVaults: `/vaults/collab`,
-    classRooms: '/room',
-    classVaults: `/vaults/class`,
+    institutes: `/institute`,
+    collabvaults: `/vaults/collab`,
+    classrooms: '/room',
+    classvaults: `/vaults/class`,
     notifications: `/notifications`,
     settings: `/settings`,
 }
@@ -46,7 +46,7 @@ const routes = createBrowserRouter([
                 element: <HomePage />,
             },
             {
-                path: `${pathLinks.institute}/:insituteID`,
+                path: `${pathLinks.institutes}/:insituteID`,
                 element: <InstitutePage />
             },
             {
@@ -58,27 +58,27 @@ const routes = createBrowserRouter([
                 element: <ProfilePage />
             },
             {
-                path: pathLinks.classRooms,
+                path: pathLinks.classrooms,
                 element: <AllClassRoomsPage />,
             },
             {
-                path: `${pathLinks.classRooms}/:roomID`,
+                path: `${pathLinks.classrooms}/:roomID`,
                 element: <ClassRoomPage />
             },
             {
-                path: pathLinks.classVaults,
+                path: pathLinks.classvaults,
                 element: <AllClassVaultsPage />,
             },
             {
-                path: `${pathLinks.classVaults}/:vaultID`,
+                path: `${pathLinks.classvaults}/:vaultID`,
                 element: <ClassVaultPage />
             },
             {
-                path: pathLinks.collabVaults,
+                path: pathLinks.collabvaults,
                 element: <AllCollabVaultsPage />,
             },
             {
-                path: `${pathLinks.collabVaults}/:vaultID`,
+                path: `${pathLinks.collabvaults}/:vaultID`,
                 element: <CollabVaultPage />
             },
             {

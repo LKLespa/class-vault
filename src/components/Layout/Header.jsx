@@ -22,18 +22,27 @@ import { useAuth } from "../../provider/AuthProvider";
 import { ColorModeButton } from "../ui/color-mode";
 import { LuHam, LuMenu, LuPlus, LuSearch } from "react-icons/lu";
 import { FiBell } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import NewVaultModal from "../Vaults/NewVaultModal";
 import { pathLinks } from "../../routes";
+import SearchResults from "./SearchResults";
 
 export default function Header() {
     const { userData } = useAuth();
     const [openDrawer, setOpenDrawer] = useState(false);
     const [openVaultMenu, setOpenVaultMenu] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [openSearchModal, setOpenSearchModal] = useState(false);
     const navigate = useNavigate();
 
     console.log("User data", userData)
+
+    useEffect(() => {
+        if(searchQuery.trim()){
+            setOpenSearchModal(true)
+        }
+    }, [searchQuery])
 
     return (
         <Drawer.Root open={openDrawer}>
@@ -47,13 +56,13 @@ export default function Header() {
                     borderBottom="1px solid"
                     borderColor="gray.100"
                 >
+                    {openSearchModal && <SearchResults query={searchQuery} setQuery={setSearchQuery} open={openSearchModal} setOpen={setOpenSearchModal} />}
                     <Text fontSize="xl" fontWeight="semibold">
                         {userData?.fullName || "Welcome"}
                     </Text>
-
                     <HStack display={{ base: "none", lg: "flex" }}>
                         <InputGroup maxWidth='300px' endElement={<IconButton variant="ghost"><LuSearch /></IconButton>}>
-                            <Input placeholder="Search..." />
+                            <Input placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
                         </InputGroup>
                         <NewVaultModal open={openVaultMenu} setOpen={setOpenVaultMenu}>
                             <Button variant='subtle'>
@@ -63,7 +72,7 @@ export default function Header() {
                     </HStack>
 
                     <HStack spacing={3}>
-                        <IconButton display={{ base: "flex", lg: "none" }} variant="ghost"><LuSearch /></IconButton>
+                        <IconButton display={{ base: "flex", lg: "none" }} variant="ghost" onClick={() => setOpenSearchModal(true)}><LuSearch /></IconButton>
                         <ColorModeButton />
                         <IconButton variant="ghost" onClick={() => navigate(pathLinks.notifications)}><FiBell /></IconButton>
                         <Avatar.Root display={{ base: "none", lg: "flex" }} cursor='pointer' onClick={() => navigate(pathLinks.profile)}>

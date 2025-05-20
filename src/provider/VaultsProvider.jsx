@@ -6,17 +6,22 @@ import {
   query,
   where,
   onSnapshot,
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { toaster } from "../components/ui/toaster";
 import { useAuth } from "./AuthProvider";
+import { collectionMap } from "../constants";
 
 const VaultContext = createContext();
 export const useVaults = () => useContext(VaultContext);
 
 export const VaultsProvider = ({ children }) => {
   const { userData } = useAuth();
-  const [collabVaults, setCollabVaults] = useState([]);
+  const [collabvaults, setCollabVaults] = useState([]);
   const [loading, setLoading] = useState(true); // Start loading by default
   const [error, setError] = useState(null);
 
@@ -28,7 +33,7 @@ export const VaultsProvider = ({ children }) => {
 
     // TODO: Query by last used
     const q = query(
-      collection(db, "collabVaults"),
+      collection(db, collectionMap.collabvaults),
       where("members", "array-contains", userData.id)
     );
 
@@ -64,13 +69,13 @@ export const VaultsProvider = ({ children }) => {
         description,
         ownerId: userData.id,
         members: [userData.id],
-        admins: [],
+        admins: [userData.id],
         joinRequests: [],
         dateCreated: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "collabVaults"), vaultData);
-      
+      await addDoc(collection(db, collectionMap.collabvaults), vaultData);
+
       onDone && onDone();
 
       toaster.create({
@@ -86,16 +91,102 @@ export const VaultsProvider = ({ children }) => {
     }
   };
 
+  const sentJoinRequest = async ({ vaultId, collectionName }) => {
+    if (!collectionName) {
+      toaster.create({
+        title: "Invalid vault type!",
+        type: "error",
+      });
+      return;
+    }
+    setLoading(true)
+    try {
+      const vaultRef = doc(db, collectionName, vaultId);
+      await updateDoc(vaultRef, {
+        joinRequests: arrayUnion(userData.id),
+      })
+    } catch (error) {
+      console.error("Error sending join request:", error.message);
+      toaster.create({
+        title: "Failed to send join request",
+        description: error.message,
+        type: "error",
+      });
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const cancelJoinRequest = async ({ userId, vaultId, collectionName }) => {
+    if (!collectionName) {
+      toaster.create({
+        title: "Invalid vault type!",
+        type: "error",
+      });
+      return;
+    }
+    setLoading(true)
+    try {
+      const vaultRef = doc(db, collectionName, vaultId);
+      await updateDoc(vaultRef, {
+        joinRequests: arrayRemove(userId),
+      })
+    } catch (error) {
+      console.error("Error cancelling request:", error.message);
+      toaster.create({
+        title: "Failed to cancel request",
+        description: error.message,
+        type: "error",
+      });
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const approveJoinRequest = async ({ userId, vaultId, collectionName }) => {
+
+    console.log("Approving", userId, vaultId, collectionName);
+    
+    if (!collectionName) {
+      toaster.create({
+        title: "Invalid vault type!",
+        type: "error",
+      });
+      return;
+    }
+
+    setLoading(true)
+    try {
+      const vaultRef = doc(db, collectionName, vaultId);
+      await updateDoc(vaultRef, {
+        joinRequests: arrayRemove(userId),
+        members: arrayUnion(userId),
+      })
+    } catch (error) {
+      console.error("Error Approving request:", error.message);
+      toaster.create({
+        title: "Failed to approve request",
+        description: error.message,
+        type: "error",
+      });
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <VaultContext.Provider
       value={{
-        collabVaults,
+        collabvaults,
         loading,
         error,
         createCollabVault,
+        sentJoinRequest,
+        cancelJoinRequest,
+        approveJoinRequest,
       }}
     >
       {children}
     </VaultContext.Provider>
-  );
-};
+  )
+}

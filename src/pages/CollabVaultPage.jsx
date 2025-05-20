@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import Loader from '../components/Resource/Loader';
 import VaultPageHeader from '../components/Vaults/VaultPageHeader';
 import { LuBell, LuFile, LuMessageCircle, LuSendToBack, LuShare, LuSkipBack, LuUsers } from 'react-icons/lu';
+import VaultMembers from '../components/Layout/VaultMembers';
 
 export default function CollabVaultPage() {
     const { vaultID } = useParams();
@@ -53,7 +54,7 @@ export default function CollabVaultPage() {
                         Reminders
                     </Tabs.Content>
                     <Tabs.Content value="members">
-                        Members
+                        <VaultMembers />
                     </Tabs.Content>
                 </Tabs.Root>
             </VStack>

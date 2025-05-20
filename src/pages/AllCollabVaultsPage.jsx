@@ -20,7 +20,7 @@ import { pathLinks } from "../routes";
 const AllCollabVaultsPage = () => {
   const [openVaultMenu, setOpenVaultMenu] = useState(false)
   const {
-    collabVaults,
+    collabvaults,
     loading,
     error,
   } = useVaults();
@@ -29,10 +29,10 @@ const AllCollabVaultsPage = () => {
     <Box p={6}>
       <HStack justify="space-between" mb={6}>
         <Heading size="lg">Your Collaborative Vaults</Heading>
-         <NewVaultModal open={openVaultMenu} setOpen={setOpenVaultMenu}>
-                                    <Button variant='subtle'>
-                                    New Vault <LuPlus />
-                                </Button></NewVaultModal>
+        <NewVaultModal open={openVaultMenu} setOpen={setOpenVaultMenu}>
+          <Button variant='subtle'>
+            New Vault <LuPlus />
+          </Button></NewVaultModal>
       </HStack>
 
       {loading ? (
@@ -42,20 +42,20 @@ const AllCollabVaultsPage = () => {
         </VStack>
       ) : error ? (
         <Text color="red.500">{error}</Text>
-      ) : collabVaults.length === 0 ? (
+      ) : collabvaults.length === 0 ? (
         <Text>No vaults found. Create one to get started!</Text>
       ) : (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={5}>
-          {collabVaults.map((vault) => (
+          {collabvaults.map((vault) => (
             <Box
               key={vault.id}
               as={RouterLink}
-              to={`${pathLinks.collabVaults}/${vault.id}`}
+              to={`${pathLinks.collabvaults}/${vault.id}`}
               p={5}
               shadow="md"
               borderWidth="1px"
               borderRadius="md"
-              _hover={{ bg:  'gray.500/20'}}
+              _hover={{ bg: 'gray.500/20' }}
               transition="all 0.2s"
             >
               <HStack spacing={4}>

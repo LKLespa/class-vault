@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useMemo } from "
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "./AuthProvider";
+import { collectionMap } from "../constants";
 
 const CollabVaultContext = createContext();
 
@@ -23,12 +24,14 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
     );
   }, [isOwner, vaultData, userData]);
 
+  const vaultType = collectionMap.collabvaults;
+
   // 📡 Fetch vault data in real-time
   useEffect(() => {
     if (!vaultId) return;
 
     setLoading(true);
-    const vaultRef = doc(db, "collabVaults", vaultId);
+    const vaultRef = doc(db, collectionMap.collabvaults, vaultId);
 
     const unsub = onSnapshot(
       vaultRef,
@@ -81,6 +84,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
     isAdmin,
     loading,
     error,
+    vaultType,
     // Methods
     getResources,
     getMessages,

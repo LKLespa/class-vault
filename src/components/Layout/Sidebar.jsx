@@ -13,9 +13,9 @@ export default function Sidebar() {
 
   const navLinks = [
   { label: "Home", icon: FiHome, path: "/" },
-  { label: "ClassRooms", icon: FiUser, path: pathLinks.classRooms},
-  { label: "ClassVaults", icon: FiFolder, path: pathLinks.classVaults },
-  { label: "CollabVaults", icon: FiUsers, path: pathLinks.collabVaults },
+  { label: "ClassRooms", icon: FiUser, path: pathLinks.classrooms},
+  { label: "ClassVaults", icon: FiFolder, path: pathLinks.classvaults },
+  { label: "CollabVaults", icon: FiUsers, path: pathLinks.collabvaults },
   { label: "Settings", icon: FiSettings, path: pathLinks.settings },
 ];
 
