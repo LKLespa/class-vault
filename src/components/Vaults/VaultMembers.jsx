@@ -6,8 +6,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { useVaults } from "../../provider/VaultsProvider";
 import { collectionMap } from "../../constants";
 
-export default function VaultMembersPage() {
-  const { vaultData, loading, vaultType } = useCollabVault();
+export default function VaultMembers() {
+  const { vaultData, loading, vaultType, isOwner, isAdmin } = useCollabVault();
   const { approveJoinRequest } = useVaults();
   const [joinRequests, setJoinRequests] = useState([]);
   const [admins, setAdmins] = useState([]);
@@ -65,7 +65,7 @@ export default function VaultMembersPage() {
 
   return (
     <VStack align="start" spacing={6} p={6} w="full" maxWidth='500px'>
-      <Section title="Join Requests" users={joinRequests}>
+      {(isOwner || isAdmin) && <Section title="Join Requests" users={joinRequests}>
         {joinRequests.map(user => (
           <Button size="sm" colorScheme="green" onClick={() =>{ 
             console.log("DATA", user.id, vaultData.id, vaultType)
@@ -73,7 +73,7 @@ export default function VaultMembersPage() {
             Approve
           </Button>
         ))}
-      </Section>
+      </Section>}
 
       <Separator />
 

@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom'
 import Loader from '../components/Resource/Loader';
 import VaultPageHeader from '../components/Vaults/VaultPageHeader';
 import { LuBell, LuFile, LuMessageCircle, LuSendToBack, LuShare, LuSkipBack, LuUsers } from 'react-icons/lu';
-import VaultMembers from '../components/Layout/VaultMembers';
+import VaultMembers from '../components/Vaults/VaultMembers';
+import VaultChat from '../components/Vaults/VaultChat';
 
 export default function CollabVaultPage() {
     const { vaultID } = useParams();
@@ -42,7 +43,7 @@ export default function CollabVaultPage() {
                             <Text display={{ base: 'none', md: 'flex' }}>Members</Text></Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="chat">
-                        Chat
+                        <VaultChat />
                     </Tabs.Content>
                     <Tabs.Content value="resources">
                         Resources

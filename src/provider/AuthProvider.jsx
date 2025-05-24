@@ -21,6 +21,8 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+
+// TODO: Handle Offline
 export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
