@@ -40,8 +40,8 @@ export default function VaultMembers() {
         Promise.all(vaultData.members?.map(fetchUserData) || [])
       ]);
 
-    const adminIDs = new Set(vaultData.admins);
-    const filteredMembers = allMemberUsers.filter(user => !adminIDs.has(user.id));
+      const adminIDs = new Set(vaultData.admins);
+      const filteredMembers = allMemberUsers.filter(user => !adminIDs.has(user.id));
 
       setJoinRequests(requests.filter(Boolean));
       setAdmins(adminUsers.filter(Boolean));
@@ -67,30 +67,23 @@ export default function VaultMembers() {
 
   return (
     <VStack align="start" spacing={6} p={6} w="full" maxWidth='500px'>
-      {(isOwner || isAdmin) && <Section title="Join Requests" users={joinRequests} userId={userData.id}>
-        {joinRequests.map(user => (
-          <Button size="sm" colorScheme="green" onClick={() =>{ 
-            console.log("DATA", user.id, vaultData.id, vaultType)
-            handleApprove(user.id)}}>
-            Approve
-          </Button>
-        ))}
+      {(isOwner || isAdmin) && <Section title="Join Requests" users={joinRequests} userId={userData.id} type='request' action={handleApprove}>
       </Section>}
 
       <Separator />
 
       <Section title="Admins" users={admins} userId={userData.id}>
-            <Kbd>Admin</Kbd>
-        </Section>
+        <Kbd>Admin</Kbd>
+      </Section>
 
       <Separator />
 
-      <Section title="Members" users={members} userId={userData.id}/>
+      <Section title="Members" users={members} userId={userData.id} />
     </VStack>
   );
 }
 
-function Section({ title, users, children, userId }) {
+function Section({ title, users, children, userId, type, action = null }) {
   return (
     <Box w="full">
       <Heading size="md" mb={3}>{title}</Heading>
@@ -104,6 +97,11 @@ function Section({ title, users, children, userId }) {
                 <Text fontWeight="medium">{user.fullName} {user.id === userId && <Kbd>Me</Kbd>}</Text>
                 <Text fontSize="sm" color="gray.500">{user.email}</Text>
               </VStack>
+              {type === 'request' && <Button size="sm" colorScheme="green" onClick={() => {
+                action(user.id)
+              }}>
+                Approve
+              </Button>}
               {children}
             </HStack>
           ))}

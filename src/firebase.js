@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD1_a4uqYcsXC2EQ5FV3r7L6M8Nvj6S23E",
-  authDomain: "classvault-1a735.firebaseapp.com",
-  projectId: "classvault-1a735",
-  storageBucket: "classvault-1a735.firebasestorage.app",
-  messagingSenderId: "66959093357",
-  appId: "1:66959093357:web:b32c02c431af048990d964",
-  measurementId: "G-PSFBV0HFWS"
+  apiKey: "AIzaSyCWyKZa-RlR0AYTDle9-imk51lmp3tcIFc",
+  authDomain: "lespa-s-todos.firebaseapp.com",
+  projectId: "lespa-s-todos",
+  storageBucket: "lespa-s-todos.appspot.com",
+  messagingSenderId: "128082750630",
+  appId: "1:128082750630:web:95e651b59c3ac8afbed867",
+  measurementId: "G-9K5NPCWYTD"
 };
 
 // Initialize Firebase
