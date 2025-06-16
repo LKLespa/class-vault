@@ -31,12 +31,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { formatTimestamp, getFileIcon } from '../../utils/file-functions';
 import { useVaults } from '../../provider/VaultsProvider';
 import { useCollabVault } from '../../provider/CollabVaultProvider';
+import { LuArrowRight } from 'react-icons/lu';
 
-export default function VaultResource({ vaultId }) {
+export default function VaultAssigments({ vaultId }) {
   const { userData } = useAuth();
   const { isAdmin, isOwner, vaultType, uploadResource, uploading } = useCollabVault();
 
-  const [resources, setResources] = useState([]);
+  const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const inputRef = useRef();
@@ -45,9 +46,10 @@ export default function VaultResource({ vaultId }) {
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
+    const path = isAdmin || isOwner ? 'assignments' : 'submissions';
     console.log('Uploading')
     const result = uploadResource({
-      file: file, message: message, path: 'resources', type: vaultType, data: {}
+      file: file, message: message, type: vaultType, path: path, data: {}
     })
 
     if (result) {
@@ -61,7 +63,7 @@ export default function VaultResource({ vaultId }) {
     if (!vaultId) return;
     setLoading(true);
     const q = query(
-      collection(db, vaultType, vaultId, 'resources'),
+      collection(db, vaultType, vaultId, 'assignments'),
       orderBy('timestamp', 'desc')
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -69,7 +71,7 @@ export default function VaultResource({ vaultId }) {
         id: doc.id,
         ...doc.data(),
       }));
-      setResources(docs);
+      setAssignments(docs);
       setLoading(false);
     });
     return () => unsubscribe();
@@ -87,18 +89,19 @@ export default function VaultResource({ vaultId }) {
       {(isAdmin || isOwner) && (
         <Flex direction="column" gap={3} mb={4}>
           <Input
-            placeholder="Optional message about this resource"
+            placeholder="Optional message about this assignment"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
           <input
             ref={inputRef}
             type="file"
+            accept=".png, .pdf, .doc, .docx, .txt"
             onChange={handleUpload}
             style={{ display: 'none' }}
           />
           <Button onClick={() => inputRef.current.click()} colorScheme="brand" loading={uploading} loadingText='Uploading...'>
-            Upload Resource
+            Add Assignment
           </Button>
         </Flex>
       )}
@@ -112,12 +115,12 @@ export default function VaultResource({ vaultId }) {
         pb={4}
         sx={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {resources.length === 0 && (
+        {assignments.length === 0 && (
           <Flex h="full" w="full" justifyContent="center" alignItems="center" color="gray.500">
-            No resources uploaded yet.
+            No assignments uploaded yet.
           </Flex>
         )}
-        {resources.map((resource) => {
+        {assignments.map((resource) => {
           const FileIcon = getFileIcon(resource.extension);
           console.log('Resource', resource)
           return (
@@ -132,7 +135,7 @@ export default function VaultResource({ vaultId }) {
                 w='100%'
               >
                 <HStack gap={3}>
-                  <Icon as={FileIcon} boxSize={6} color="brand.500" />
+                  <Icon as={FileIcon} boxSize={{base: 10, md: 15, lg: 20}} color="brand.500" />
                   <Box>
                     <Text fontWeight="bold" isTruncated maxW="250px">
                       {resource.name}
@@ -147,7 +150,8 @@ export default function VaultResource({ vaultId }) {
                     )}
                   </Box>
                 </HStack>
-                <Button
+                <VStack>
+                  <Button
                   as="a"
                   href={resource.url}
                   target="_blank"
@@ -157,8 +161,11 @@ export default function VaultResource({ vaultId }) {
                 >
                   View
                 </Button>
+                </VStack>
               </HStack>
-              <Text fontSize='sm' mt={3} color='gray.400' w='full' textAlign='right'>{resource.senderName} - {formatTimestamp(resource.timestamp)}</Text>
+              <HStack w='full' justifyContent='space-between'>
+               {(isAdmin || isOwner) && <Button variant='plain' bg='brand.200/50'>View Submissions (3)</Button>}
+                <Text fontSize='sm' mt={3} color='gray.400' w='full' textAlign='right'>{resource.senderName} - {formatTimestamp(resource.timestamp)}</Text></HStack>
             </VStack>
           );
         })}

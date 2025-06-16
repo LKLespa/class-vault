@@ -8,7 +8,7 @@ import { LuBell, LuFile, LuMessageCircle, LuSendToBack, LuShare, LuSkipBack, LuU
 import VaultMembers from '../components/Vaults/VaultMembers';
 import VaultChat from '../components/Vaults/VaultChat'
 import { collectionMap } from '../constants';
-import VaultSubmissions from '../components/Vaults/VaultSubmissions';
+import VaultSubmissions from '../components/Vaults/VaultAssignments';
 import VaultResource from '../components/Vaults/VaultResource';
 
 export default function CollabVaultPage() {
@@ -35,7 +35,8 @@ export default function CollabVaultPage() {
                         <Tabs.Trigger value="submissions" flex={1}> <Box display={{ base: 'flex', md: 'none', lg: 'flex' }}>
                             <LuShare size='20px' />
                         </Box>
-                            <Text display={{ base: 'none', md: 'flex' }}>Submissions</Text></Tabs.Trigger>
+                            <Text display={{ base: 'none', md: 'flex' }}>Assignments</Text>
+                            </Tabs.Trigger>
                         <Tabs.Trigger value="reminders"  flex={1}> <Box display={{ base: 'flex', md: 'none', lg: 'flex' }}>
                             <LuBell size='20px' />
                         </Box>

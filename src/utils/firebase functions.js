@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-const uploadFile = async ({ file, vaultId }) => {
+const uploadFile = async ({ file, vaultId, path }) => {
   if (!file || !vaultId) return null;
 
   return new Promise((resolve, reject) => {
     const fileId = uuidv4();
     const extension = file.name.split(".").pop();
-    const fullPath = `vaults/${vaultId}/resources/${fileId}.${extension}`;
+    const fullPath = `vaults/${vaultId}/${path}/${fileId}.${extension}`;
 
     const storageRef = ref(storage, fullPath);
     const uploadTask = uploadBytesResumable(storageRef, file);

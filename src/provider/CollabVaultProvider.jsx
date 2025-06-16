@@ -78,10 +78,11 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
     file,
     message = "",
     type,
+    path,
     otherData = {}
   }) => {
     console.log("Upload Resource", file, message, type, otherData)
-    if (!file || !type) return null;
+    if (!file || !type || !path) return null;
 
     setUploading(true);
     try {
@@ -89,7 +90,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
       const uploadedData = await uploadFile({
         file,
         vaultId,
-        path: "resources",
+        path: path,
       });
 
       console.log("Here");
@@ -97,7 +98,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
       if (!uploadedData) throw new Error("File upload failed");
 
       // Step 2: Add document to Firestore
-      const docRef = await addDoc(collection(db, vaultType, vaultId, "resources"), {
+      const docRef = await addDoc(collection(db, vaultType, vaultId, path), {
         name: uploadedData.name,
         url: uploadedData.url,
         fileSize: uploadedData.fileSize,
