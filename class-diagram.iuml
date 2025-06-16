@@ -1,0 +1,89 @@
+@startuml Edudocs_ClassDiagram
+
+' Define classes
+class User {
+  +userId: string
+  +name: string
+  +email: string
+  +role: string
+  +phoneNumber: string
+}
+
+class Vault {
+  +vaultId: string
+  +name: string
+  +description: string
+  +createdBy: string
+  +members: List<User>
+  +admins: List<User>
+  +joinRequest: List<User>
+  +ownerId: string
+  +dateCreated: Date
+}
+
+class Material {
+  +materialId: string
+  +vaultId: string
+  +title: string
+  +fileURL: string
+  +uploadedBy: string
+  +fileType: string
+  +timestamp: Date
+}
+
+class Assignment {
+  +assignmentId: string
+  +vaultId: string
+  +title: string
+  +description: string
+  +dueDate: Date
+  +createdAt: Date
+}
+
+class Submission {
+  +submissionId: string
+  +assignmentId: string
+  +studentId: string
+  +fileURL: string
+  +submittedAt: Date
+  +feedback: string
+  +status: string
+}
+
+class Notification {
+  +notificationId: string
+  +recipientId: string
+  +vaultId: string
+  +message: string
+  +type: string
+  +timestamp: Date
+  +readStatus: boolean
+}
+
+class Chat {
+  +chatId: string
+  +vaultId: string
+}
+
+class Message {
+  +messageId: string
+  +chatId: string
+  +senderId: string
+  +messageText: string
+  +timestamp: Date
+}
+
+' Define relationships
+User "0" -- "*" Vault : creates >
+User "0" -- "*" Vault : request to join >
+Vault "1" -- "*" User : has members >
+Vault "0" -- "*" Material : contains >
+Vault "0" -- "*" Assignment : has >
+Vault "0" -- "*" User : join request >
+Assignment "0" -- "*" Submission : receives >
+Vault "0" -- "*" Notification : triggers >
+Vault "1" -- "1" Chat : has >
+Chat "0" -- "*" Message : contains >
+User "0" -- "*" Message : sends >
+
+@enduml

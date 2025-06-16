@@ -5,9 +5,11 @@ import { db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useVaults } from "../../provider/VaultsProvider";
 import { collectionMap } from "../../constants";
+import { useAuth } from "../../provider/AuthProvider";
 
 export default function VaultMembers() {
   const { vaultData, loading, vaultType, isOwner, isAdmin } = useCollabVault();
+  const { userData } = useAuth();
   const { approveJoinRequest } = useVaults();
   const [joinRequests, setJoinRequests] = useState([]);
   const [admins, setAdmins] = useState([]);
@@ -65,7 +67,7 @@ export default function VaultMembers() {
 
   return (
     <VStack align="start" spacing={6} p={6} w="full" maxWidth='500px'>
-      {(isOwner || isAdmin) && <Section title="Join Requests" users={joinRequests}>
+      {(isOwner || isAdmin) && <Section title="Join Requests" users={joinRequests} userId={userData.id}>
         {joinRequests.map(user => (
           <Button size="sm" colorScheme="green" onClick={() =>{ 
             console.log("DATA", user.id, vaultData.id, vaultType)
@@ -77,18 +79,18 @@ export default function VaultMembers() {
 
       <Separator />
 
-      <Section title="Admins" users={admins}>
+      <Section title="Admins" users={admins} userId={userData.id}>
             <Kbd>Admin</Kbd>
         </Section>
 
       <Separator />
 
-      <Section title="Members" users={members} />
+      <Section title="Members" users={members} userId={userData.id}/>
     </VStack>
   );
 }
 
-function Section({ title, users, children }) {
+function Section({ title, users, children, userId }) {
   return (
     <Box w="full">
       <Heading size="md" mb={3}>{title}</Heading>
@@ -99,7 +101,7 @@ function Section({ title, users, children }) {
           {users.map(user => (
             <HStack key={user.id} justify="space-between" w="full">
               <VStack align="start" spacing={0}>
-                <Text fontWeight="medium">{user.fullName}</Text>
+                <Text fontWeight="medium">{user.fullName} {user.id === userId && <Kbd>Me</Kbd>}</Text>
                 <Text fontSize="sm" color="gray.500">{user.email}</Text>
               </VStack>
               {children}
