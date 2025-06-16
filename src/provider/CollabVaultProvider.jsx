@@ -79,9 +79,9 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
     message = "",
     type,
     path,
-    otherData = {}
+    data = {}
   }) => {
-    console.log("Upload Resource", file, message, type, otherData)
+    console.log("Upload Resource", file, message, type, data)
     if (!file || !type || !path) return null;
 
     setUploading(true);
@@ -108,7 +108,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
         timestamp: serverTimestamp(),
         senderId: userData.id,
         senderName: userData.fullName,
-        ...otherData,
+        ...data,
       });
       console.log("Now here");
       setUploading(false)
