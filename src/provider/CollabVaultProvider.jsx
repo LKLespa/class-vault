@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
-import { addDoc, collection, doc, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, serverTimestamp, Timestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "./AuthProvider";
 import { collectionMap } from "../constants";
@@ -112,7 +112,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
       });
       console.log("Now here");
       setUploading(false)
-      toaster.create({title: "Uploaded Successful", type: 'success'})
+      toaster.create({ title: "Uploaded Successful", type: 'success' })
       return {
         id: docRef.id,
         ...uploadedData,
@@ -122,7 +122,7 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
       };
     } catch (err) {
       console.log("❌ Failed to upload resource:", err);
-      toaster.create({title: "❌ Upload Failed:", type: 'error'})
+      toaster.create({ title: "❌ Upload Failed:", type: 'error' })
       setUploading(false)
       return null;
     } finally {
@@ -130,43 +130,70 @@ export const CollabVaultProvider = ({ children, vaultId }) => {
     }
   }
 
+  const uploadSubmission = ({ document, info, respondingToFile }) => { };
+  const downloadResource = ({ path, type }) => { };
+  const viewResource = ({ path, data }) => { };
+  const sendFeedBack = ({ resourceID, message }) => { };
 
-    const uploadSubmission = ({ document, info, respondingToFile }) => { };
-    const downloadResource = ({ path, type }) => { };
-    const viewResource = ({ path, data }) => { };
-    const sendReminder = ({ reminder }) => { };
-    const sendFeedBack = ({ resourceID, message }) => { };
+ 
+  const sendReminder = async ({
+    description = "",
+    dueDate = "",
+    data = {},
+  }) => {
+    if (!description.trim() || !dueDate ) return null;
 
-    const value = {
-      vaultData,
-      vaultMessages,
-      vaultResources,
-      isOwner,
-      isAdmin,
-      loading,
-      uploading,
-      error,
-      vaultType,
-      // Methods
-      getResources,
-      getMessages,
-      getSubmissions,
-      makeAdmin,
-      sendRequestToJoin,
-      acceptRequestToJoin,
-      sendMessage,
-      uploadFile,
-      uploadResource,
-      uploadSubmission,
-      downloadResource,
-      viewResource,
-      sendReminder,
-      sendFeedBack,
-    };
+    setLoading(true);
+    try {
+      await addDoc(collection(db, vaultType, vaultId, "reminders"), {
+        description: description.trim(),
+        dueDate: new Date(dueDate),
+        timestamp: serverTimestamp(),
+        createdBy: userData.id,
+        createdByName: userData.fullName,
+        data, // anything else dynamic goes in here
+      });
 
-    return (
-      <CollabVaultContext.Provider value={value}>
-        {children}
-      </CollabVaultContext.Provider>
-    );
+      toaster.create({ title: "Reminder Added", type: 'success' })
+      return {description, dueDate};
+    } catch (err) {
+      console.error("❌ Failed to send reminder:", err);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const value = {
+    vaultData,
+    vaultMessages,
+    vaultResources,
+    isOwner,
+    isAdmin,
+    loading,
+    uploading,
+    error,
+    vaultType,
+    // Methods
+    getResources,
+    getMessages,
+    getSubmissions,
+    makeAdmin,
+    sendRequestToJoin,
+    acceptRequestToJoin,
+    sendMessage,
+    uploadFile,
+    uploadResource,
+    uploadSubmission,
+    downloadResource,
+    viewResource,
+    sendReminder,
+    sendFeedBack,
   };
+
+  return (
+    <CollabVaultContext.Provider value={value}>
+      {children}
+    </CollabVaultContext.Provider>
+  );
+};

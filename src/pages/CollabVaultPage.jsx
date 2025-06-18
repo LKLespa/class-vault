@@ -10,6 +10,7 @@ import VaultChat from '../components/Vaults/VaultChat'
 import { collectionMap } from '../constants';
 import VaultSubmissions from '../components/Vaults/VaultAssignments';
 import VaultResource from '../components/Vaults/VaultResource';
+import VaultReminders from '../components/Vaults/VaultReminders';
 
 export default function CollabVaultPage() {
     const { vaultID } = useParams();
@@ -19,9 +20,9 @@ export default function CollabVaultPage() {
         <CollabVaultProvider vaultId={vaultID}>
             <VStack>
                 <Tabs.Root defaultValue='chat' variant='outline' width='full'>
-                    <Box pb={2} display={{base: 'block', lg: 'none'}}><VaultPageHeader /></Box>
+                    <Box pb={2} display={{ base: 'block', lg: 'none' }}><VaultPageHeader /></Box>
                     <Tabs.List alignItems='end'>
-                        <Box p={2} pe={5} display={{base: 'none', lg: 'flex'}}><VaultPageHeader textAlign='start' /></Box>
+                        <Box p={2} pe={5} display={{ base: 'none', lg: 'flex' }}><VaultPageHeader textAlign='start' /></Box>
                         <Tabs.Trigger value="chat" flex={1}>
                             <Box display={{ base: 'flex', md: 'none', lg: 'flex' }}>
                                 <LuMessageCircle size='20px' />
@@ -36,8 +37,8 @@ export default function CollabVaultPage() {
                             <LuShare size='20px' />
                         </Box>
                             <Text display={{ base: 'none', md: 'flex' }}>Assignments</Text>
-                            </Tabs.Trigger>
-                        <Tabs.Trigger value="reminders"  flex={1}> <Box display={{ base: 'flex', md: 'none', lg: 'flex' }}>
+                        </Tabs.Trigger>
+                        <Tabs.Trigger value="reminders" flex={1}> <Box display={{ base: 'flex', md: 'none', lg: 'flex' }}>
                             <LuBell size='20px' />
                         </Box>
                             <Text display={{ base: 'none', md: 'flex' }}>Reminders</Text></Tabs.Trigger>
@@ -47,16 +48,16 @@ export default function CollabVaultPage() {
                             <Text display={{ base: 'none', md: 'flex' }}>Members</Text></Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="chat">
-                        <VaultChat vaultId={vaultID} vaultType={collectionMap.collabvaults}/>
+                        <VaultChat vaultId={vaultID} vaultType={collectionMap.collabvaults} />
                     </Tabs.Content>
                     <Tabs.Content value="resources">
-                        <VaultResource vaultId={vaultID} vaultType={collectionMap.collabvaults}/>
+                        <VaultResource vaultId={vaultID} vaultType={collectionMap.collabvaults} />
                     </Tabs.Content>
                     <Tabs.Content value="submissions">
-                        <VaultSubmissions vaultId={vaultID} vaultType={collectionMap.collabvaults}/>
+                        <VaultSubmissions vaultId={vaultID} vaultType={collectionMap.collabvaults} />
                     </Tabs.Content>
                     <Tabs.Content value="reminders">
-                        Reminders
+                        <VaultReminders vaultId={vaultID} />
                     </Tabs.Content>
                     <Tabs.Content value="members">
                         <VaultMembers />

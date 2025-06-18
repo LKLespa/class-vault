@@ -38,7 +38,7 @@ import AssignmentSubmission from './AssignmentSubmission';
 
 export default function VaultAssigments({ vaultId }) {
   const { userData } = useAuth();
-  const { isAdmin, isOwner, vaultType, uploadassignment, uploading } = useCollabVault();
+  const { isAdmin, isOwner, vaultType, uploadResource, uploading, sendReminder } = useCollabVault();
   const [openSubmissionModal, setOpenSubmissionModal] = useState(false);
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -47,16 +47,21 @@ export default function VaultAssigments({ vaultId }) {
   const inputRef = useRef();
 
   const [message, setMessage] = useState("");
+  const [date, setDate] = useState('');
+  const dateInputRef = useRef();
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     console.log('Uploading')
-    const result = uploadassignment({
+    const result = await uploadResource({
       file: file, message: message, type: vaultType, path: 'assignments', data: {}
     })
 
     if (result) {
+      await sendReminder({dueDate: date, description: message, data: {fileUrl: result.url, fileName: result.name, fileExtension: result.extension}})
+      alert('one')
       setMessage('');
+      setDate('');
     } else {
 
     }
@@ -87,12 +92,25 @@ export default function VaultAssigments({ vaultId }) {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
   };
 
+  const handleDateChange = (e) => {
+    const date = e.target.value;
+    console.log('Date', typeof(date), date)
+    setDate(date)
+  }
+
   return (
     <Flex direction="column" h="80vh" w="full" p={{ base: 0, md: 4 }} maxW="1000px" mx="auto">
       {(isAdmin || isOwner) && (
         <Flex direction="column" gap={3} mb={4}>
+          <VStack alignItems='start'>
+            <Text fontSize='sm' color='gray.500'>Select Due Date</Text>
+          <HStack>
+            <Input ref={dateInputRef} value={date} type='datetime-local' id='date-input' placeholder='Enter due date' onChange={handleDateChange}/>
+            <Button variant={'plain'} onClick={() => setDate('')}>Clear</Button>
+          </HStack>
+          </VStack>
           <Input
-            placeholder="Optional message about this assignment"
+            placeholder="Message about this assignment"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
