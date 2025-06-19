@@ -1,11 +1,13 @@
 {
   "firestore": {
-    "rules": " ",
+    "database": "(default)",
+    "location": "eur3",
+    "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "site": "classvault",
     "public": "build",
+    "site": "edu-docs",
     "ignore": [
       "firebase.json",
       "**/.*",
